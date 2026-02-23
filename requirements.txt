@@ -1,0 +1,10 @@
+langchain
+ollama
+langchain[google-genai]
+ipykernel
+ipywidgets
+langchain-core
+langchain-community
+chromadb
+bs4
+trafilatura
