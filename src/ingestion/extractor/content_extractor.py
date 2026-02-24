@@ -1,4 +1,5 @@
 from typing import Optional
+from bs4 import BeautifulSoup
 import trafilatura
 
 def extract_main_content(html: str) -> Optional[str]:
@@ -13,6 +14,20 @@ def extract_main_content(html: str) -> Optional[str]:
     """
     if not html:
         return None
+    
+    soup = BeautifulSoup(html, "html.parser")
+
+    # Remove scripts/styles
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+
+    # First try structured extraction
+    main_container = soup.find("div", id="content-container")
+
+    if main_container:
+        text = main_container.get_text(separator="\n", strip=True)
+        if text:
+            return text
     
     try:
         extracted_text = trafilatura.extract(

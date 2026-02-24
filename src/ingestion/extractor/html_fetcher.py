@@ -10,7 +10,7 @@ default_headers = {
     )
 }
 
-def fetch_html(url: str, timeout: int = 10) -> Optional[str]:
+def fetch_html(url: str, session: requests.Session, timeout: int = 10) -> Optional[str]:
     '''
     Fetch raw HTML content from a given URL.
 
@@ -22,7 +22,7 @@ def fetch_html(url: str, timeout: int = 10) -> Optional[str]:
         Optional[str]: HTML content if successful, otherwise None.
     '''
     try:
-        response = requests.get(
+        response = session.get(
             url,
             headers = default_headers,
             timeout=timeout
@@ -33,11 +33,11 @@ def fetch_html(url: str, timeout: int = 10) -> Optional[str]:
 
         # Ensure content type is HTML
         content_type = response.headers.get("Content-Type", "")
-        if "text/html" not in content_type:
+        if "html" not in content_type.lower():
             return None
 
         return response.text
     
-    except requests.exceptions.RequestException:
-        # Can be later replace this with proper logging
+    except requests.exceptions.RequestException as e:
+        print(f"Fetch failed for {url}: {e}")
         return None
