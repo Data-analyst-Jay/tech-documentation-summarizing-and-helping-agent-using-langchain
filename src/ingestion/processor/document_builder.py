@@ -8,7 +8,8 @@ def build_document(url: str, text: str, title: str, domain: str) -> Document:
         "source": url,
         "url": url,
         "title": title,
-        "domain": domain
+        "domain": domain,
+        "content_length": len(text)
     }
 
     return Document(

@@ -1,4 +1,6 @@
 import hashlib
+from typing import List
+from langchain_core.documents import Document
 
 _seen_hashes = set()
 
@@ -22,3 +24,15 @@ def is_duplicate(text: str) -> bool:
 
     _seen_hashes.add(text_hash)
     return False
+
+def deduplicate_chunks(documents: List[Document]) -> List[Document]:
+    '''
+    Remove duplicate chunks based on the page_content hash.
+    '''
+    unique_docs = []
+
+    for doc in documents:
+        if not is_duplicate(doc.page_content):
+            unique_docs.append(doc)
+
+    return unique_docs
